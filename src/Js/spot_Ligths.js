@@ -66,7 +66,6 @@ const options = {
   wireframe: false,
   directionalLight: "#ffffff",
   directionalLightIntensity:1,
-  shadowMovement:-3
 };
 gui.addColor(options, "sphereColor").onChange((e) => {
   sphere.material.color.set(e);
@@ -78,12 +77,7 @@ gui.add(options, "wireframe").onChange((e) => {
 
 // Directional Lighting
 let directionalLights = new THREE.DirectionalLight(options.directionalLight,1);
-gui.add(options,'shadowMovement',-10,10)
-directionalLights.castShadow=true
 scene.add(directionalLights);
-const dLightHelper=new THREE.DirectionalLightHelper(directionalLights);
-scene.add(dLightHelper);
-
 gui.addColor(options, "directionalLight").onChange((e) => {
   directionalLights.color.set(e);
 });
@@ -95,7 +89,6 @@ let step=0
 const height=3
 const speed=0.02
 function animate() {
-  directionalLights.position.set(options.shadowMovement,10,-options.shadowMovement)
 
   step += speed;
   sphere.position.y = height * Math.abs(Math.sin(step));
