@@ -2,12 +2,13 @@
   "name": "three-js-praactice",
   "version": "1.0.0",
   "scripts": {
-     "dev": "parcel src/index.html"
+    "dev": "parcel src/index.html"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dat.gui": "^0.7.9",
     "parcel": "^2.16.4",
     "three": "^0.183.2"
   }
