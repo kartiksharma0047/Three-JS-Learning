@@ -81,14 +81,18 @@ spotLight.position.set(-3,4,3)
 spotLight.castShadow=true
 spotLight.angle=0.5
 scene.add(spotLight);
-const spotLightHelper=new THREE.SpotLightHelper(spotLight)
-scene.add(spotLightHelper)
 gui.addColor(options, "spotLight").onChange((e) => {
   spotLight.color.set(e);
 });
 gui.add(options, "spotLightIntensity",1,10).onChange((e) => {
   spotLight.intensity=e;
 });
+
+// Method 1 - Here we set the distance where fog appears, the further you go the more fog appears
+// scene.fog=new THREE.Fog(0x000000,0,50)
+
+// Method 2 - Here we set density where the density of fog grows exponintially when distance becomes more
+scene.fog=new THREE.FogExp2(0x000000,0.05)
 
 let step=0
 const height=3

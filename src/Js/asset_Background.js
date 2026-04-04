@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "dat.gui";
+import try1 from 'url:../assets/images/try4.jpg'
+import try2 from 'url:../assets/images/try5.jpg'
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -64,8 +66,6 @@ const gui = new dat.GUI();
 const options = {
   sphereColor: "#0000ff",
   wireframe: false,
-  spotLight: "#ffffff",
-  spotLightIntensity:1,
 };
 gui.addColor(options, "sphereColor").onChange((e) => {
   sphere.material.color.set(e);
@@ -75,20 +75,35 @@ gui.add(options, "wireframe").onChange((e) => {
   sphere.material.wireframe = e;
 });
 
-// Directional Lighting
-let spotLight = new THREE.SpotLight(options.spotLight,10);
-spotLight.position.set(-3,4,3)
-spotLight.castShadow=true
-spotLight.angle=0.5
+let spotLight = new THREE.AmbientLight(options.spotLight,1);
 scene.add(spotLight);
-const spotLightHelper=new THREE.SpotLightHelper(spotLight)
-scene.add(spotLightHelper)
-gui.addColor(options, "spotLight").onChange((e) => {
-  spotLight.color.set(e);
-});
-gui.add(options, "spotLightIntensity",1,10).onChange((e) => {
-  spotLight.intensity=e;
-});
+
+
+// Now here we will load the image as background
+const textureLoader = new THREE.TextureLoader();
+// This will add 2D Background
+// scene.background=textureLoader.load(GalaxyImg)
+
+// Now to load 3D background
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+
+scene.background = cubeTextureLoader.load([
+  try1,
+  try1,
+  try2,
+  try2,
+  try2,
+  try2
+]);
+
+// We can also set background images to Mesh too
+const cube2=new THREE.BoxGeometry(1,1,1)
+const cube2Material=new THREE.MeshBasicMaterial({
+  map:textureLoader.load(try1)
+})
+const cube2box=new THREE.Mesh(cube2,cube2Material);
+cube2box.position.set(2,1,0)
+scene.add(cube2box)
 
 let step=0
 const height=3
