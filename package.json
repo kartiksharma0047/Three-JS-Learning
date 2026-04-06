@@ -13,6 +13,7 @@
     "three": "^0.183.2"
   },
   "devDependencies": {
+    "buffer": "^6.0.3",
     "url": "^0.11.4"
   }
 }
