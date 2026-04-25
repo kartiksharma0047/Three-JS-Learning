@@ -1,4 +1,4 @@
-// Here we just made a vertex shader and added a sin motion.
+// Here we made gradient color changing fragment shader
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 
@@ -22,21 +22,33 @@ orbit.update();
 
 const uniforms = {
   u_time: { type: "f", value: 0.0 },
+  u_resolution: {
+    type: "v2",
+    value: new THREE.Vector2(
+      window.innerWidth,
+      window.innerHeight,
+    ).multiplyScalar(window.devicePixelRatio),
+  },
 };
 
 const vertexShader = `
-  uniform float u_time;
-  void main() {
-    float newX=sin(position.x * u_time) * sin(position.y * u_time);
-    vec3 newPosition=vec3(newX,position.y,position.z);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-  }
+    void main() {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
 `;
 
 const fragmentShader = `
-  void main() {
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-  }
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    void main() {
+        vec2 st = gl_FragCoord.xy / u_resolution;
+        vec3 color = vec3(
+            0.5 + 0.5 * sin(u_time + st.x * 3.0),
+            0.5 + 0.5 * sin(u_time + st.y * 3.0),
+            0.5 + 0.5 * sin(u_time)
+        );
+        gl_FragColor = vec4(color, 1.0);
+    }
 `;
 
 const geometry = new THREE.PlaneGeometry(10, 10, 30, 30);
@@ -53,8 +65,8 @@ scene.add(mesh);
 
 const timer = new THREE.Timer();
 function animate() {
-    uniforms.u_time.value = timer.getElapsed();
-    timer.update();
+  uniforms.u_time.value = timer.getElapsed();
+  timer.update();
   renderer.render(scene, camera);
 }
 
